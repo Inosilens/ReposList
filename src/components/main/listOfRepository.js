@@ -33,7 +33,7 @@ export const ListOfRepository = ({ data, loading ,getMoreInfo}) => {
             <h3>ID : {item.id}</h3>
 
             <Link to="cart">
-              <a onClick={()=>getMoreInfo(item)} href=""> Open repository</a>{" "}
+              <a onClick={()=>getMoreInfo(item)} href=""> More info</a>{" "}
             </Link>
           </div>
       ))}
