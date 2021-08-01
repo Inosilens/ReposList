@@ -5,29 +5,45 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Switch } from "react-router";
 import ReposCart from "./components/peposCart/reposCart";
 import { ListOfRepository } from "./components/main/listOfRepository";
-import {createPages} from "./components/pagination";
+import { createPages } from "./components/pagination";
 
 function App() {
   const [allData, setAllData] = useState([]);
   const [reposList, setReposList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [reposId, setReposId] = useState(null);
 
-  const allPages = Math.ceil(allData.total_count/allData.items.length)
-    console.log(allPages)
-  const pages = []
-  createPages(pages,allPages,currentPage)
+  const allPages = Math.ceil(allData.total_count / 30);
+  console.log(allPages);
+  const pages = [];
+  createPages(pages, allPages, currentPage);
 
   useEffect(() => {
-    getData().then((r) => {
+    setLoading(true);
+    getData(
+      "https://api.github.com/search/repositories?q=stars%3A%3E0&sort=stars&order=desc&page=1"
+    ).then((r) => {
       setAllData(r);
       setReposList(r.items);
+      setLoading(false);
     });
   }, []);
 
- const changePage = (page) => {
-     setCurrentPage(page)
-
-  }
+  useEffect(() => {
+    setLoading(true);
+    getData(
+      `https://api.github.com/search/repositories?q=stars%3A%3E0&sort=stars&order=desc&page=${currentPage}`
+    ).then((r) => {
+      setAllData(r);
+      setReposList(r.items);
+      setLoading(false);
+    });
+  }, [currentPage]);
+  const changePage = (page) => {
+    setCurrentPage(page);
+  };
+  const getMoreInfo = (id) => setReposId([id]);
   return (
     <Router>
       <Switch>
@@ -36,19 +52,28 @@ function App() {
           exact
           render={() => (
             <>
-              <ListOfRepository data={reposList} />
-              <div className="pages">
-              {pages.map((item,index)=>
-              <div onClick={()=>changePage(item)} className={currentPage===item?"active" : "page" } key={index}>{item}</div>)}
+              <ListOfRepository
+                data={reposList}
+                loading={loading}
+                getMoreInfo={getMoreInfo}
+              />
+
+              <div className={loading ? "pageOff" : "pages"}>
+                {pages.map((item, index) => (
+                  <div
+                    onClick={() => changePage(item)}
+                    className={currentPage === item ? "current" : "page"}
+                    key={index}
+                  >
+                    {item}
+                  </div>
+                ))}
               </div>
-
-
-
             </>
           )}
         />
 
-        <Route path="/favorites" render={() => <ReposCart />} />
+        <Route path="/cart" render={() => <ReposCart reposId={reposId} />} />
       </Switch>
     </Router>
   );
