@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export const ListOfRepository = ({ data, loading ,getMoreInfo}) => {
+export const ListOfRepository = ({setCurrentPage,inputValue,setInputValue, data, loading ,getMoreInfo,setSearchResult}) => {
   if (loading) {
     return (
       <div className="Loading">
@@ -27,6 +27,14 @@ export const ListOfRepository = ({ data, loading ,getMoreInfo}) => {
   }
   return (
     <div>
+      <input type="input" onChange={(e)=> {
+        setInputValue(e.target.value)
+
+      }}/>
+      <button onClick={()=> {
+        setCurrentPage(1)
+        setSearchResult(inputValue)
+      }}>Tap to search</button>
       {data.map((item, index) => (
           <div className="container" key={index}>
             <h1>Repository name : {item.name}</h1>

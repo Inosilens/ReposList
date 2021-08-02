@@ -13,9 +13,13 @@ function App() {
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [reposId, setReposId] = useState(null);
+  const [inputValue,setInputValue]=useState()
+  const [serachResult,setSearchResult] =useState("")
+
+
+
 
   const allPages = Math.ceil(allData.total_count / 30);
-  console.log(allPages);
   const pages = [];
   createPages(pages, allPages, currentPage);
 
@@ -30,6 +34,18 @@ function App() {
     });
   }, []);
 
+  useEffect(() => {
+    setLoading(true);
+    if(serachResult)
+      getData(
+          `https://api.github.com/search/repositories?q=${serachResult}+language:all&sort=stars&order=desc&per_page=30&page=${currentPage}`
+      ).then((r) => {
+        setAllData(r);
+        setReposList(r.items);
+        setLoading(false);
+      })
+
+    },[serachResult]);
   useEffect(() => {
     setLoading(true);
     getData(
@@ -56,6 +72,11 @@ function App() {
                 data={reposList}
                 loading={loading}
                 getMoreInfo={getMoreInfo}
+                inputValue={inputValue}
+                setInputValue={setInputValue}
+                setSearchResult={setSearchResult}
+                setCurrentPage={setCurrentPage}
+
               />
 
               <div className={loading ? "pageOff" : "pages"}>
