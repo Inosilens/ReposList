@@ -1,6 +1,6 @@
 import React from 'react';
 
-export function createPages(pages, pagesCount, currentPage) {
+export function createPages(pages, pagesCount, currentPage  ) {
     if(pagesCount > 10) {
         if(currentPage > 5) {
             for (let i = currentPage-4; i <= currentPage+5; i++) {

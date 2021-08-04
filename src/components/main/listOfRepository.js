@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import debounce from "../../services/debounce";
 
-export const ListOfRepository = ({setCurrentPage,inputValue,setInputValue, data, searchValue ,getMoreInfo,setSearchValue}) => {
+export const ListOfRepository = ({loading,setCurrentPage,inputValue,setInputValue, data, searchValue ,getMoreInfo,setSearchValue}) => {
   let getInput = (e) =>
   {
     e.preventDefault()
@@ -14,32 +14,10 @@ export const ListOfRepository = ({setCurrentPage,inputValue,setInputValue, data,
 
 
 
-  if (!data) {
-    return (
-      <div className="Loading">
-        <div className="windows8">
-          <div className="wBall" id="wBall_1">
-            <div className="wInnerBall" />
-          </div>
-          <div className="wBall" id="wBall_2">
-            <div className="wInnerBall" />
-          </div>
-          <div className="wBall" id="wBall_3">
-            <div className="wInnerBall" />
-          </div>
-          <div className="wBall" id="wBall_4">
-            <div className="wInnerBall" />
-          </div>
-          <div className="wBall" id="wBall_5">
-            <div className="wInnerBall" />
-          </div>
-        </div>
-      </div>
-    );
-  }
+
   return (
     <div>
-      <input type="input"    onChange={getInput}/>
+      <input type="input" placeholder="Search repository"   onChange={getInput}/>
       <button onClick={(e)=> {
         e.preventDefault()
         setInputValue("")
@@ -49,7 +27,6 @@ export const ListOfRepository = ({setCurrentPage,inputValue,setInputValue, data,
       {data.map((item, index) => (
           <div className="container" key={index}>
             <h1>Repository name : {item.name}</h1>
-            <h3>ID : {item.id}</h3>
 
             <Link to="cart">
               <a onClick={()=>getMoreInfo(item)} href=""> More info</a>{" "}

@@ -40,61 +40,87 @@ function App() {
         ).then((r) => {
           setAllData(r);
           setReposList(r.items);
-          setLoading(false);
+
         })
       : getData(
           `https://api.github.com/search/repositories?q=stars%3A%3E0&sort=stars&order=desc&page=${currentPage}`
         ).then((r) => {
           setAllData(r);
           setReposList(r.items);
-          setLoading(false);
+
         });
 
     setLoading(false);
-  }, [pages===1?currentPage:inputValue]);
+  }, [currentPage,inputValue]);
 
   const changePage = (page) => {
     setCurrentPage(page);
   };
   const getMoreInfo = (id) => setReposId([id]);
-  return (
-    <Router>
-      <Switch>
-        <Route
-          path="/"
-          exact
-          render={() => (
-            <>
-              <ListOfRepository
-                data={reposList}
-                loading={loading}
-                getMoreInfo={getMoreInfo}
-                inputValue={inputValue}
-                setInputValue={setInputValue}
-                setCurrentPage={setCurrentPage}
-                searchValue = { searchValue}
-                setSearchValue = {setSearchValue}
-              />
 
-              <div className={loading ? "pageOff" : "pages"}>
-                {pages.map((item, index) => (
-                  <div
-                    onClick={() => changePage(item)}
-                    className={currentPage === item ? "current" : "page"}
-                    key={index}
-                  >
-                    {item}
-                  </div>
-                ))}
-              </div>
-            </>
-          )}
-        />
+    if (loading) {
+        return (
+            <div className="Loading">
+                <div className="windows8">
+                    <div className="wBall" id="wBall_1">
+                        <div className="wInnerBall" />
+                    </div>
+                    <div className="wBall" id="wBall_2">
+                        <div className="wInnerBall" />
+                    </div>
+                    <div className="wBall" id="wBall_3">
+                        <div className="wInnerBall" />
+                    </div>
+                    <div className="wBall" id="wBall_4">
+                        <div className="wInnerBall" />
+                    </div>
+                    <div className="wBall" id="wBall_5">
+                        <div className="wInnerBall" />
+                    </div>
+                </div>
+            </div>
+        );
+    }
+    else {
+        return (
+            <Router>
+                <Switch>
+                    <Route
+                        path="/"
+                        exact
+                        render={() => (
+                            <><h1>List of Repository</h1>
+                                <ListOfRepository
+                                    data={reposList}
+                                    loading={loading}
+                                    getMoreInfo={getMoreInfo}
+                                    inputValue={inputValue}
+                                    setInputValue={setInputValue}
+                                    setCurrentPage={setCurrentPage}
+                                    searchValue={searchValue}
+                                    setSearchValue={setSearchValue}
+                                />
 
-        <Route path="/cart" render={() => <ReposCart reposId={reposId} />} />
-      </Switch>
-    </Router>
-  );
+                                <div className={loading ? "pageOff" : "pages"}>
+                                    {pages.map((item, index) => (
+                                        <div
+                                            onClick={() => changePage(item)}
+                                            className={currentPage === item ? "current" : "page"}
+                                            key={index}
+                                        >
+                                            {item}
+                                        </div>
+                                    ))}
+                                </div>
+                            </>
+                        )}
+                    />
+
+                    <Route path="/cart" render={() => <ReposCart reposId={reposId}/>}/>
+                </Switch>
+            </Router>
+        );
+    }
 }
 
 export default App;
