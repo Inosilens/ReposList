@@ -1,8 +1,20 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import debounce from "../../services/debounce";
 
-export const ListOfRepository = ({setCurrentPage,inputValue,setInputValue, data, loading ,getMoreInfo,setSearchResult}) => {
-  if (loading) {
+export const ListOfRepository = ({setCurrentPage,inputValue,setInputValue, data, searchValue ,getMoreInfo,setSearchValue}) => {
+  let getInput = (e) =>
+  {
+    e.preventDefault()
+    setSearchValue(e.target.value)
+    setInputValue(e.target.value)
+
+  }
+   getInput = debounce(getInput,500)
+
+
+
+  if (!data) {
     return (
       <div className="Loading">
         <div className="windows8">
@@ -27,14 +39,13 @@ export const ListOfRepository = ({setCurrentPage,inputValue,setInputValue, data,
   }
   return (
     <div>
-      <input type="input" onChange={(e)=> {
-        setInputValue(e.target.value)
+      <input type="input"    onChange={getInput}/>
+      <button onClick={(e)=> {
+        e.preventDefault()
+        setInputValue("")
+       document.querySelector("input").value = ""
 
-      }}/>
-      <button onClick={()=> {
-        setCurrentPage(1)
-        setSearchResult(inputValue)
-      }}>Tap to search</button>
+      }}>Clear</button>
       {data.map((item, index) => (
           <div className="container" key={index}>
             <h1>Repository name : {item.name}</h1>

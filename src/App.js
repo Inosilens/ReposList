@@ -13,10 +13,8 @@ function App() {
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [reposId, setReposId] = useState(null);
-  const [inputValue,setInputValue]=useState()
-  const [serachResult,setSearchResult] =useState("")
-
-
+  const [inputValue, setInputValue] = useState("");
+  const [searchValue,setSearchValue]=useState("")
 
 
   const allPages = Math.ceil(allData.total_count / 30);
@@ -36,26 +34,25 @@ function App() {
 
   useEffect(() => {
     setLoading(true);
-    if(serachResult)
-      getData(
-          `https://api.github.com/search/repositories?q=${serachResult}+language:all&sort=stars&order=desc&per_page=30&page=${currentPage}`
-      ).then((r) => {
-        setAllData(r);
-        setReposList(r.items);
-        setLoading(false);
-      })
+    inputValue
+      ? getData(
+          `https://api.github.com/search/repositories?q=${inputValue}+language:all&sort=stars&order=desc&per_page=30&page=${currentPage}`
+        ).then((r) => {
+          setAllData(r);
+          setReposList(r.items);
+          setLoading(false);
+        })
+      : getData(
+          `https://api.github.com/search/repositories?q=stars%3A%3E0&sort=stars&order=desc&page=${currentPage}`
+        ).then((r) => {
+          setAllData(r);
+          setReposList(r.items);
+          setLoading(false);
+        });
 
-    },[serachResult]);
-  useEffect(() => {
-    setLoading(true);
-    getData(
-      `https://api.github.com/search/repositories?q=stars%3A%3E0&sort=stars&order=desc&page=${currentPage}`
-    ).then((r) => {
-      setAllData(r);
-      setReposList(r.items);
-      setLoading(false);
-    });
-  }, [currentPage]);
+    setLoading(false);
+  }, [pages===1?currentPage:inputValue]);
+
   const changePage = (page) => {
     setCurrentPage(page);
   };
@@ -74,9 +71,9 @@ function App() {
                 getMoreInfo={getMoreInfo}
                 inputValue={inputValue}
                 setInputValue={setInputValue}
-                setSearchResult={setSearchResult}
                 setCurrentPage={setCurrentPage}
-
+                searchValue = { searchValue}
+                setSearchValue = {setSearchValue}
               />
 
               <div className={loading ? "pageOff" : "pages"}>
