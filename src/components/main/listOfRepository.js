@@ -1,38 +1,40 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
+
 import debounce from "../../services/debounce";
 
-export const ListOfRepository = ({loading,setCurrentPage,inputValue,setInputValue, data, searchValue ,getMoreInfo,setSearchValue}) => {
-  let getInput = (e) =>
-  {
-    e.preventDefault()
-    setSearchValue(e.target.value)
-    setInputValue(e.target.value)
 
-  }
-   getInput = debounce(getInput,500)
+export const ListOfRepository = ({inputValue, setInputValue, data, getMoreInfo, setCurrentPage}) => {
 
+    const func = debounce((e) => {
+            e.preventDefault()
+            setInputValue(e.target.value)
+            setCurrentPage(1)
 
-
-
-  return (
-    <div>
-      <input type="input" placeholder="Search repository"   onChange={getInput}/>
-      <button onClick={(e)=> {
-        e.preventDefault()
+        }
+        , 700)
+    const clearSearch = () => {
         setInputValue("")
-       document.querySelector("input").value = ""
+        setCurrentPage(1)
+    }
 
-      }}>Clear</button>
-      {data.map((item, index) => (
-          <div className="container" key={index}>
-            <h1>Repository name : {item.name}</h1>
 
-            <Link to="cart">
-              <a onClick={()=>getMoreInfo(item)} href=""> More info</a>{" "}
-            </Link>
-          </div>
-      ))}
-    </div>
-  );
+    return (
+        <div>
+
+
+            <input className="m-3" type="input" placeholder="Search repository" onChange={func}/>
+            <button className="btn btn-outline-primary" onClick={clearSearch}>Clear search</button>
+            {inputValue ? <div>Result of search : {inputValue} </div> : null}
+            {data.map((item, index) => (
+                <div className="container-fluid  border border-danger p-3" key={index}>
+                    <h1> {item.name}</h1>
+
+                    <Link to="cart">
+                        <a onClick={() => getMoreInfo(item)} href=""> More info</a>{" "}
+                    </Link>
+                </div>
+            ))}
+        </div>
+    );
 };
