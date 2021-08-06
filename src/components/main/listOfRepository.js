@@ -23,12 +23,13 @@ export const ListOfRepository = ({inputValue, setInputValue, data, getMoreInfo, 
         <div>
 
 
-            <input className="m-3" type="input" placeholder="Search repository" onChange={func}/>
+            <input className="inputSearch" type="input" placeholder="Search repository" onChange={func}/>
             <button className="btn btn-outline-primary" onClick={clearSearch}>Clear search</button>
-            {inputValue ? <div>Result of search : {inputValue} </div> : null}
+            {inputValue ? <div className="resultSearch">Result of search : {inputValue} </div> : null}
             {data.map((item, index) => (
                 <div className="container-fluid  border border-danger p-3" key={index}>
                     <h1> {item.name}</h1>
+                    <h3>Stars : {item.stargazers_count}</h3>
 
                     <Link to="cart">
                         <a onClick={() => getMoreInfo(item)} href=""> More info</a>{" "}

@@ -81,13 +81,14 @@ function App() {
         );
     } else {
         return (
+            <div className="pt-3">
             <Router>
                 <Switch>
                     <Route
                         path="/"
                         exact
                         render={() => (
-                            <><h1>List of Repository</h1>
+                            <><h1 className="title">List of Repository</h1>
                                 <ListOfRepository
                                     data={reposList}
                                     loading={loading}
@@ -107,6 +108,7 @@ function App() {
                     <Route path="/cart" render={() => <ReposCart reposId={reposId}/>}/>
                 </Switch>
             </Router>
+            </div>
         );
     }
 }

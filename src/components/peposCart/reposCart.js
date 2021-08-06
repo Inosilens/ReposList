@@ -25,7 +25,9 @@ export default function ReposCart({reposId}) {
                     <div className="container__options text-left">
                         <h1> {item.name}</h1>
                         <h3>Repository ID : {item.id}</h3>
-                        <h2>Stars : {item.stargazers_count}</h2>
+                        <h2>Watcher : {item.watchers_count
+                        }</h2>
+                        <h2>Language : {item.language}</h2>
                         <a href={item.html_url} target="_blank">
                             Link to repository
                         </a>
